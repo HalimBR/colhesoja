@@ -1,9 +1,15 @@
+import 'dart:convert';
+
 import 'package:colhesoja/controllers/drawer.dart';
+import 'package:colhesoja/models/jsontempo.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:http/http.dart' as http;
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final  lat;
+  final  lng;
+  const HomePage({Key? key, required this.lat, required this.lng}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
@@ -11,6 +17,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
 
+  final _controller = PageController(initialPage: 0);
   // ignore: prefer_const_constructors
   var corsoja = Color.fromRGBO(242, 226, 171, 1);
   var cortempo = Colors.transparent;
@@ -63,6 +70,7 @@ class _HomePageState extends State<HomePage> {
                             cormoedatxt = normaltxt;
                             cortempo = normal;
                             cortempotxt = normaltxt;
+                            _controller.jumpToPage(0);
                             });
                           },
                           child: Container(
@@ -93,6 +101,7 @@ class _HomePageState extends State<HomePage> {
                             cormoedatxt = normaltxt;
                             cortempo = selecionado;
                             cortempotxt = selecionado;
+                            _controller.jumpToPage(1);
                           });
                         },
                           child: Container(
@@ -122,6 +131,7 @@ class _HomePageState extends State<HomePage> {
                             cormoedatxt = selecionado;
                             cortempo = normal;
                             cortempotxt = normaltxt;
+                            _controller.jumpToPage(2);
                           });
                         },
                           child: Container(
@@ -157,7 +167,19 @@ class _HomePageState extends State<HomePage> {
                             ]),
                         image: DecorationImage(
                             alignment: Alignment.bottomCenter,
-                            image: AssetImage("assets/fundo.png"))),
+                            image: AssetImage("assets/fundo.png")
+                        ),
+                    ),
+                    child: PageView(
+                      controller: _controller,
+                      allowImplicitScrolling: false,
+                      // ignore: prefer_const_literals_to_create_immutables
+                      children: [
+                        Soja(),
+                        Tempo(lat: widget.lat, lng: widget.lng),
+                        Moeda()
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
@@ -377,6 +399,76 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
           )),
+    );
+  }
+}
+
+
+class Soja extends StatefulWidget {
+  const Soja({ Key? key }) : super(key: key);
+
+  @override
+  State<Soja> createState() => _SojaState();
+}
+
+class _SojaState extends State<Soja> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.black,
+    );
+  }
+}
+
+class Tempo extends StatefulWidget {
+  final lat;
+  final lng;
+  const Tempo({ Key? key, this.lat, this.lng }) : super(key: key);
+
+  @override
+  State<Tempo> createState() => _TempoState();
+}
+
+class _TempoState extends State<Tempo> {
+
+  Future<JsonTEMPO> getTempo() async {
+    var lat = widget.lat;
+    var lng = widget.lng;
+     var url = Uri.parse("https://api.openweathermap.org/data/2.5/weather?lat=$lat&lon=$lng&appid=cb39989a80c47f27caa6dfc7039e2e67&units=metric");
+     var response = await http.get(url);
+     JsonTEMPO jsonTEMPO = JsonTEMPO.fromJson(jsonDecode(response.body));
+     return jsonTEMPO;
+    
+   }
+
+  @override
+  Widget build(BuildContext context) {
+    return FutureBuilder<JsonTEMPO>(
+      future: getTempo(),
+      builder: (context, snap){
+        if(snap.hasData){
+          return Container(
+            height: 300,
+          child: Text(snap.data!.main!.temp.toString()),
+        );
+        } else return Container(child: Text("Erro"),);
+      },
+    );
+  }
+}
+
+class Moeda extends StatefulWidget {
+  const Moeda({ Key? key }) : super(key: key);
+
+  @override
+  State<Moeda> createState() => _MoedaState();
+}
+
+class _MoedaState extends State<Moeda> {
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      color: Colors.yellow,
     );
   }
 }

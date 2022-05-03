@@ -1,10 +1,12 @@
-import 'package:colhesoja/pages/homepage.dart';
+
+import 'package:colhesoja/pages/splashscreen.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 void main() {
-  runApp(const MaterialApp(
+  runApp(const GetMaterialApp(
     debugShowCheckedModeBanner: false,
-    home: HomePage(),
+    home: SplashScreen(),
   ));
 }
 
