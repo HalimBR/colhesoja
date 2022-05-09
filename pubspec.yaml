@@ -39,6 +39,7 @@ dependencies:
   get: ^4.6.1
   location: ^4.2.0
   http:
+  font_awesome_flutter:
 
 dev_dependencies:
   flutter_test:
