@@ -26,6 +26,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
   @override
     initState() {
       super.initState();
+      Location.instance.requestPermission();
       controller = AnimationController(
       vsync: this,
       duration: const Duration(seconds: 4, milliseconds: 30),

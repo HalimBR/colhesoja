@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:colhesoja/controllers/drawer.dart';
+import 'package:colhesoja/models/jsonmoeda.dart';
 import 'package:colhesoja/models/jsontempo.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -444,63 +445,248 @@ class _TempoState extends State<Tempo> {
       future: getTempo(),
       builder: (context, snap) {
         if (snap.hasData) {
+          String temp = snap.data!.main!.temp!.toStringAsFixed(0);
+          String descr = snap.data!.weather![0].description.toString();
           return Container(
-              height: 300,
+              height: MediaQuery.of(context).size.height / 5,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
-                      const CircleAvatar(
-                        backgroundColor: Color.fromRGBO(187, 135, 75, 1),
-                        child: Icon(
-                          FontAwesomeIcons.moon,
-                          color: Color.fromRGBO(242, 226, 171, 1),
-                        ),
-                      ),
+                      CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Color.fromRGBO(187, 135, 75, 1),
+                          child: Center(
+                              child: icone(
+                                  snap.data!.weather![0].icon.toString()))),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            snap.data!.main!.temp!.toStringAsFixed(0) +
-                                "°" +
-                                "C",
+                            temp + "°" + "C",
                             style: GoogleFonts.inter(
                               fontWeight: FontWeight.bold,
                               color: Color.fromRGBO(81, 34, 13, 1),
                               fontSize: 25,
                             ),
                           ),
-                          Text(
-                            snap.data!.weather![0].description.toString(),
-                            style: GoogleFonts.inter(
-                                fontWeight: FontWeight.bold,
-                                color: Color.fromRGBO(81, 34, 13, 1),
-                                fontSize: 20),
-                          ),
+                          descri(snap.data!.weather![0].description.toString())
                         ],
                       )
                     ],
                   ),
                   Text(
-                            snap.data!.name.toString()
-                                ,
-                            style: GoogleFonts.inter(
-                              fontWeight: FontWeight.bold,
-                              color: Color.fromRGBO(81, 34, 13, 1),
-                              fontSize: 15,
-                            ),
-                          ),
-                  SizedBox(height: MediaQuery.of(context).size.height / 7,)
-                  
+                    snap.data!.name.toString(),
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.bold,
+                      color: Color.fromRGBO(81, 34, 13, 1),
+                      fontSize: 15,
+                    ),
+                  ),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 7,
+                  )
                 ],
               ));
-        } else
-          return Container(
-            child: Text("Erro"),
+        } else {
+          return Center(
+            child: CircularProgressIndicator(
+              color: Colors.black,
+            )
           );
+        }
       },
+    );
+  }
+
+  Widget icone(String data) {
+    if (data == "01d") {
+      return Icon(
+        FontAwesomeIcons.sun,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "02d") {
+      return Icon(
+        FontAwesomeIcons.cloudSun,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "03d") {
+      return Icon(
+        FontAwesomeIcons.cloudSun,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "04d") {
+      return Icon(FontAwesomeIcons.cloud,
+          color: Color.fromRGBO(242, 226, 171, 1), size: 30);
+    }
+    if (data == "09d") {
+      return Icon(
+        FontAwesomeIcons.cloudRain,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "10d") {
+      return Icon(
+        FontAwesomeIcons.cloudRain,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "11d") {
+      return Icon(
+        FontAwesomeIcons.cloudBolt,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "13d") {
+      return Icon(
+        FontAwesomeIcons.snowflake,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "50d") {
+      return Icon(
+        FontAwesomeIcons.wind,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "01n") {
+      return Icon(
+        FontAwesomeIcons.moon,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "02d") {
+      return Icon(
+        FontAwesomeIcons.cloudMoon,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "03d") {
+      return Icon(
+        FontAwesomeIcons.cloudMoon,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "04d") {
+      return Icon(FontAwesomeIcons.cloud,
+          color: Color.fromRGBO(242, 226, 171, 1), size: 30);
+    }
+    if (data == "09d") {
+      return Icon(
+        FontAwesomeIcons.cloudRain,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "10d") {
+      return Icon(
+        FontAwesomeIcons.cloudRain,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "11d") {
+      return Icon(
+        FontAwesomeIcons.cloudBolt,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "13d") {
+      return Icon(
+        FontAwesomeIcons.snowflake,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    if (data == "50d") {
+      return Icon(
+        FontAwesomeIcons.wind,
+        color: Color.fromRGBO(242, 226, 171, 1),
+        size: 30,
+      );
+    }
+    return Icon(Icons.error, color: Color.fromRGBO(242, 226, 171, 1), size: 30);
+  }
+
+  Widget descri(String data) {
+    if(data == "clear sky"){
+      return Text("Céu Limpo",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    if(data == "few clouds"){
+      return Text("Poucas Nuvens",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    if(data == "scattered clouds"){
+      return Text("Nublado",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    if(data == "broken clouds"){
+      return Text("Nublado",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    if(data == "Shower Rain"){
+      return Text("Chuva Leve",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    if(data == "rain"){
+      return Text("Chovendo",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    if(data == "thunderstorm"){
+      return Text("Temporal",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    if(data == "snow"){
+      return Text("Nevando",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20));
+    }
+    return Text("Erro",
+      style: GoogleFonts.inter(
+          fontWeight: FontWeight.bold,
+          color: Color.fromRGBO(81, 34, 13, 1),
+          fontSize: 20),
     );
   }
 }
@@ -513,10 +699,115 @@ class Moeda extends StatefulWidget {
 }
 
 class _MoedaState extends State<Moeda> {
+
+  final key = GlobalKey();
+  Future<Cota> getMoeda() async {
+    var url = Uri.parse(
+        "https://economia.awesomeapi.com.br/json/last/USD-BRL,EUR-BRL,ARS-BRL,GBP-BRL,UYU-BRL");
+    var response = await http.get(url);
+    Cota cota = Cota.fromJson(jsonDecode(response.body));
+    return cota;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: Colors.yellow,
+    return FutureBuilder<Cota>(
+      future: getMoeda(),
+      builder: (context, snap){
+        if(snap.hasData){
+          return Container(
+              height: MediaQuery.of(context).size.height / 5,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      CircleAvatar(
+                          radius: 40,
+                          backgroundColor: Color.fromRGBO(187, 135, 75, 1),
+                          child: Center(
+                              child: Icon(FontAwesomeIcons.sackDollar, size: 30, color:  Color.fromRGBO(242, 226, 171, 1),), )),
+                      Container(
+                        key: key,
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: AssetImage("assets/us.png")
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.white12,
+                                        
+                                        Color.fromRGBO(187, 135, 75, 1)
+                                      ]
+                                    )
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("US\$ 1,00 Dólar Americano"),
+                                      SizedBox(width: 20),
+                                      Text(double.parse(snap.data!.uSDBRL!.high!).toStringAsFixed(2))
+                                    ],
+                                  ),
+                                  
+                                ),
+                                
+                                
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                CircleAvatar(
+                                  backgroundImage: AssetImage("assets/us.png")
+                                ),
+                                Container(
+                                  decoration: BoxDecoration(
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        Colors.white12,
+                                        
+                                        Color.fromRGBO(187, 135, 75, 1)
+                                      ]
+                                    )
+                                  ),
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                    children: [
+                                      Text("E 1,00 Libra"),
+                                      SizedBox(width: 20),
+                                      Text(double.parse(snap.data!.uSDBRL!.high!).toStringAsFixed(2))
+                                    ],
+                                  ),
+                                  
+                                ),
+                                
+                                
+                              ],
+                            )
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
+                  
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height / 7,
+                  )
+                ],
+              ));
+        } else {
+          return Container();
+        }
+      },
     );
   }
 }
